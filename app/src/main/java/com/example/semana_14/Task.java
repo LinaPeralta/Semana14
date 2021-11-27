@@ -66,7 +66,7 @@ public class Task extends AppCompatActivity {
         newNota.setValue(nota);
 
 
-        newNota.addValueEventListener(//ON
+       /* newNota.addValueEventListener(//ON
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot data) {
@@ -84,6 +84,8 @@ public class Task extends AppCompatActivity {
                     }
                 }
         );
+
+        */
     }
 
 }
