@@ -8,8 +8,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -23,7 +26,7 @@ public class Task extends AppCompatActivity {
     private ListView itemsList;
     private String ID;
 
-    private ArrayList<Nota> data;
+    private ArrayList<Nota> dataNotas;
     private ArrayAdapter<Nota> adapter;
 
     @Override
@@ -45,15 +48,9 @@ public class Task extends AppCompatActivity {
             registrar();
         });
 
-
-        /*
-        data = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,data);
-        itemsList.setAdapter(adapter );
-
-         */
-
-
+        dataNotas = new ArrayList<>();
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,dataNotas);
+        itemsList.setAdapter(adapter);
 
     }
 
@@ -67,5 +64,26 @@ public class Task extends AppCompatActivity {
         );
 
         newNota.setValue(nota);
+
+
+        newNota.addValueEventListener(//ON
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot data) {
+                        dataNotas.clear();
+                        for (DataSnapshot child : data.getChildren()) {
+                            Nota noticas = child.getValue(Nota.class);
+                            dataNotas.add(noticas);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+
+                    }
+                }
+        );
     }
+
 }
